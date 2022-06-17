@@ -21,14 +21,4 @@ export class Users extends Service {
 			name: 'users',
 		});
 	}
-	async create(
-		data: Partial<UsersData>,
-		params?: Params | undefined
-	): Promise<UsersData> {
-		return this.options.Model.insert({
-			username: data.username,
-			password: data.password,
-			email: data.email,
-		}).into('users');
-	}
 }
