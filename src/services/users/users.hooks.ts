@@ -1,6 +1,5 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import * as local from '@feathersjs/authentication-local';
-import { HookContext } from '../../app';
 import { UsersData } from './users.class';
 // Don't remove this comment. It's needed to format import lines nicely.
 import { HooksObject, Service } from '@feathersjs/feathers';
