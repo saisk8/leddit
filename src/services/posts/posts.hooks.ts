@@ -18,7 +18,7 @@ export default {
 		],
 		find: [],
 		get: [],
-		create: [setNow('createdAt')],
+		create: [setNow('createdAt', 'updatedAt')],
 		update: [setNow('updatedAt')],
 		patch: [setNow('updatedAt')],
 		remove: [],

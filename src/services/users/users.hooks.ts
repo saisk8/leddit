@@ -1,39 +1,37 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import * as local from '@feathersjs/authentication-local';
-import { UsersData } from './users.class';
-// Don't remove this comment. It's needed to format import lines nicely.
-import { HooksObject, Service } from '@feathersjs/feathers';
+
+import { HooksObject } from '@feathersjs/feathers';
 const { authenticate } = feathersAuthentication.hooks;
 const { hashPassword, protect } = local.hooks;
+import { softDelete, setNow } from 'feathers-hooks-common';
 
 const hooks: Partial<HooksObject<any>> = {
 	before: {
-		all: [],
+		all: [
+			softDelete({
+				deletedQuery: async () => {
+					return { deletedAt: null };
+				},
+				removeData: async () => {
+					return { deletedAt: new Date() };
+				},
+			}),
+		],
 		find: [authenticate('jwt')],
 		get: [authenticate('jwt')],
-		create: [
-			hashPassword('password'),
-			(context: any) => {
-				(context.data as UsersData).updatedAt = new Date();
-				return context;
-			},
-		],
+		create: [hashPassword('password'), setNow('createdAt', 'updatedAt')],
 		update: [
 			hashPassword('password'),
 			authenticate('jwt'),
-			(context: any) => {
-				(context.data as UsersData).updatedAt = new Date();
-				return context;
-			},
+			setNow('updatedAt'),
 		],
-		patch: [hashPassword('password'), authenticate('jwt')],
-		remove: [
+		patch: [
+			hashPassword('password'),
 			authenticate('jwt'),
-			(context: any) => {
-				(context.data as UsersData).deletedAt = new Date();
-				return context;
-			},
+			setNow('updatedAt'),
 		],
+		remove: [authenticate('jwt')],
 	},
 
 	after: {
