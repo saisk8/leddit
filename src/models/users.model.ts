@@ -19,10 +19,10 @@ export default function (app: Application): Knex {
 					table.string('username').unique();
 					table.string('password').notNullable();
 					table.string('githubId');
-					table.integer('posts').references('id').inTable('posts');
-					// Add created_at and updated_at
-					table.timestamps();
-					table.dateTime('deleted_at').defaultTo(null);
+
+					table.dateTime('deletedAt').defaultTo(null);
+					table.dateTime('createdAt').defaultTo(db.fn.now());
+					table.dateTime('updatedAt').defaultTo(db.fn.now());
 				})
 				.then(() => console.log(`Created ${tableName} table`))
 				.catch((e) =>

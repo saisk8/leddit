@@ -23,8 +23,9 @@ export default function (app: Application): Knex {
 						.inTable('users')
 						.onDelete('SET NULL');
 					// Add created_at and updated_at
-					table.timestamps();
-					table.dateTime('deleted_at').defaultTo(null);
+					table.dateTime('deletedAt').defaultTo(null);
+					table.dateTime('createdAt').defaultTo(db.fn.now());
+					table.dateTime('updatedAt').defaultTo(db.fn.now());
 				})
 				.then(() => console.log(`Created ${tableName} table`))
 				.catch((e) =>
